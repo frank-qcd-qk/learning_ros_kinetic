@@ -42,7 +42,7 @@ test_planner::TestPlanner::TestPlanner() {
     //empty constructor; plug-in will call "initialize"
 }
 
-void test_planner::TestPlanner::initialize(std::string name, tf::TransformListener * tf, costmap_2d::Costmap2DROS * costmap_ros) {
+void test_planner::TestPlanner::initialize(std::string name, tf2_ros::Buffer * tf, costmap_2d::Costmap2DROS * costmap_ros) {
     ros::NodeHandle nh(name);
     ROS_INFO("plug-in planner initialization: ");
     nh_ = nh;
@@ -203,8 +203,8 @@ bool test_planner::TestPlanner::setPlan(const std::vector< geometry_msgs::PoseSt
             //The direction of the transform returned will be from the target_frame to the source_frame. 
             //Which if applied to data, will transform data in the source_frame into the target_frame. 
             //See tf/CoordinateFrameConventions#Transform_Direction
-            tf_->lookupTransform("odom", "base_link", ros::Time(0), stfBaseLinkWrtOdom_);
-        } catch (tf::TransformException &exception) {
+            tf_->lookupTransform("odom", "base_link", ros::Time(0));
+        } catch (tf2::TransformException &exception) {
             ROS_WARN("%s; retrying...", exception.what());
             tferr = true;
             ros::Duration(0.5).sleep(); // sleep for half a second
@@ -223,8 +223,8 @@ bool test_planner::TestPlanner::setPlan(const std::vector< geometry_msgs::PoseSt
             //The direction of the transform returned will be from the target_frame to the source_frame. 
             //Which if applied to data, will transform data in the source_frame into the target_frame. 
             //See tf/CoordinateFrameConventions#Transform_Direction
-            tf_->lookupTransform("map", "odom", ros::Time(0), stfOdomWrtMap_);
-        } catch (tf::TransformException &exception) {
+            tf_->lookupTransform("map", "odom", ros::Time(0));
+        } catch (tf2::TransformException &exception) {
             ROS_WARN("%s; retrying...", exception.what());
             tferr = true;
             ros::Duration(0.5).sleep(); // sleep for half a second
@@ -265,7 +265,7 @@ void test_planner::TestPlanner::compute_stf_base_wrt_map() {
      */
      
     //update to latest stfOdomWrtMap
-    tf_->lookupTransform("map", "odom", ros::Time(0), stfOdomWrtMap_);
+    tf_->lookupTransform("map", "odom", ros::Time(0));
     //make an stf from odom:
     //get the position from odom, converted to a tf type
     tf::Vector3 pos;

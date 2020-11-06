@@ -21,7 +21,7 @@ namespace test_planner {
 		//TestPlanner(std::string name, costmap_2d::Costmap2DROS* costmap_ros);
 
 		/** overridden classes from interface nav_core::BaseGlobalPlanner **/
-		void initialize(std::string name, tf::TransformListener * tf, costmap_2d::Costmap2DROS * costmap_ros);
+		void initialize(std::string name, tf2_ros::Buffer* tf, costmap_2d::Costmap2DROS * costmap_ros);
 		bool isGoalReached();
 		bool setPlan(const std::vector< geometry_msgs::PoseStamped > &plan);
 		bool computeVelocityCommands(geometry_msgs::Twist &cmd_vel);
@@ -51,7 +51,7 @@ namespace test_planner {
                 base_local_planner::WorldModel* world_model_; ///< @brief The world model that the controller will use
 		ros::Time tg;
 		unsigned int old_size;
-		tf::TransformListener * handed_tf;
+		tf2_ros::Buffer * handed_tf;
                 ros::Subscriber odom_subscriber_;
                 ros::Publisher pose_publisher_;
                 ros::Publisher test_publisher_;
@@ -67,7 +67,7 @@ namespace test_planner {
                 tf::StampedTransform stfBaseLinkWrtOdom_; //base link w/rt odom frame; get this from tf; 
                 tf::StampedTransform stfOdomWrtMap_;
                 tf::StampedTransform stfEstBaseWrtMap_; 
-                tf::TransformListener * tf_;
+                tf2_ros::Buffer * tf_;
                 nav_msgs::Odometry current_odom_;
                 geometry_msgs::Pose odom_pose_;
                 double odom_x_,odom_y_;
